@@ -1,0 +1,43 @@
+﻿@inherits MainLayoutBase
+
+<MudThemeProvider Theme="@DefaultTheme" @ref="@MudThemeProvider" @bind-IsDarkMode="@IsDarkMode" />
+<MudDialogProvider Position="DialogPosition.TopCenter" MaxWidth="MaxWidth.ExtraSmall" CloseButton="true" CloseOnEscapeKey="true" />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudIconButton Icon="@(IsDarkMode ? @Icons.Filled.WbSunny : @Icons.Filled.Brightness4)" Color="Color.Inherit" OnClick="DarkModeToggle" />
+        <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+            <ActivatorContent>
+                <MudAvatar Class="bg-dark-pink" style="width: 34px; height: 34px;">@FirstLetterOfFirstName</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <PersonCard Class="mt-n2"
+                            FirstLetterOfFirstName="@FirstLetterOfFirstName"
+                            FullName="@FullName"
+                            Role="@Role" />
+                <MudDivider Class="mb-2" />
+                <form method="post" action="Identity/Account/Logout">
+                    <div class="d-flex align-center">
+                        <MudIconButton ButtonType="ButtonType.Submit"
+                                       Icon="@Icons.Material.Outlined.Login" />
+                        <span class="ml-2">Log Out</span>
+                    </div>
+                </form>
+            </ChildContent>
+        </MudMenu>
+    </MudAppBar>
+    <MudDrawer @bind-Open="IsDrawerOpened" Elevation="1" ClipMode="DrawerClipMode.Never">
+        <MudDrawerHeader Class="justify-center">
+            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" />
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
