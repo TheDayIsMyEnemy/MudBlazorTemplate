@@ -1,0 +1,33 @@
+.icon-btn span svg {
+    width: 0.9em;
+    height: 0.9em;
+}
+
+.fab {
+    width: 38px;
+    height: 38px;
+}
+
+    .fab span svg {
+        width: 0.8em !important;
+        height: 0.8em !important;
+    }
+
+.nav-icon {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.bg-dark-pink {
+    background-color: #ff4081ff !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .mud-table-container {
+        height: 270px;
+    }
+
+    .search-field {
+        width: 100px;
+    }
+}
