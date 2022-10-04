@@ -3,15 +3,16 @@ Blazor Server Template using MudBlazor
 
 ### Built With
 - [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+- [Blazor Server](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-6.0#blazor-server)
 - [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 - [MudBlazor](https://mudblazor.com)
 
 ### Content
 
-- [Main branch](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/main) includes only the Dark Theme
-- [Sql branch](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/sql) includes EF Core and SQL Server setup
-- [User management](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/user-management) branch includes all the features
+- [Main Branch](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/main) includes only the Dark Theme
+- [Sql Branch](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/sql) includes EF Core and SQL Server setup
+- [User Management Branch](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/user-management) includes all the features
 
 ### Features
 
