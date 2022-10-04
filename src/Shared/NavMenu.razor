@@ -3,6 +3,11 @@
         <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">
             Home
         </MudNavLink>
+        <AuthorizeView Roles="@Roles.Admin">
+            <MudNavLink Href="users" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.ManageAccounts">
+                Users
+            </MudNavLink>
+        </AuthorizeView>
     </MudNavMenu>
 </MudPaper>
 
