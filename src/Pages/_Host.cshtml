@@ -1,5 +1,7 @@
 ﻿@page "/"
+@attribute [Authorize]
 @namespace MudBlazorTemplate.Pages
+@using Microsoft.AspNetCore.Authorization
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_Layout";

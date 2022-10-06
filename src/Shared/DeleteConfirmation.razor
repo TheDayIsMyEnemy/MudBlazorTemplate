@@ -1,0 +1,45 @@
+﻿<MudDialog ClassActions="ma-2">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.DeleteForever"
+                     Color="Color.Error"
+                     Class="mr-3 mb-n1" />
+            @(string.IsNullOrWhiteSpace(Title) ? _defaultTitle : Title)
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            @(string.IsNullOrWhiteSpace(Content) ? _defaultContent : Content)
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Transparent"
+                   Variant="Variant.Outlined"
+                   Size="Size.Small"
+                   OnClick="Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Color="Color.Error"
+                   Variant="Variant.Filled"
+                   Size="Size.Small"
+                   OnClick="Delete">
+            Delete
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    private string _defaultTitle = "Delete record";
+    private string _defaultContent = "Are you sure you want to delete this record?";
+
+    [CascadingParameter]
+    private MudDialogInstance _mudDialog { get; set; } = null!;
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Content { get; set; }
+
+    private void Delete() => _mudDialog.Close(DialogResult.Ok(true));
+    private void Cancel() => _mudDialog.Cancel();
+}

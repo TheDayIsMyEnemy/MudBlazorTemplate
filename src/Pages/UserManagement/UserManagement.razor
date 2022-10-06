@@ -1,0 +1,62 @@
+﻿@page "/user-management"
+@inherits UserManagementBase
+
+<PageTitle>User Management</PageTitle>
+
+<MudTable Items="Users"
+          Hover="true"
+          Filter="new Func<User, bool>(Filter)"
+          Loading="IsLoading">
+    <ToolBarContent>
+        <MudFab StartIcon="@Icons.Filled.PersonAdd"
+                Color="Color.Primary"
+                Size="Size.Small"
+                Class="fab"
+                OnClick="CreateUser" />
+        <MudSpacer />
+        <MudTextField @bind-Value="SearchQuery"
+                      Placeholder="Search"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Small"
+                      Class="search-field mt-0" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>First Name</MudTh>
+        <MudTh>Last Name</MudTh>
+        <MudTh>Email Address</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="First Name">@context.FirstName</MudTd>
+        <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudStack Row="true">
+                <MudTooltip Placement="Placement.Top" Text="Assign Roles">
+                    <MudIconButton Icon="@Icons.Filled.Edit"
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   OnClick="(e) => AssignRoles(context)">
+                    </MudIconButton>
+                </MudTooltip>
+                @if (CurrentUserId != context.Id)
+                {
+                    <MudTooltip Placement="Placement.Top" Text="Delete">
+                        <MudIconButton Icon="@Icons.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="(e) => DeleteUser(context)">
+                        </MudIconButton>
+                    </MudTooltip>
+                }
+            </MudStack>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+
