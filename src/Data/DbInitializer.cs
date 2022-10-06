@@ -1,6 +1,7 @@
 ﻿using MudBlazorTemplate.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MudBlazorTemplate.Data
 {
@@ -38,6 +39,7 @@ namespace MudBlazorTemplate.Data
                     LastName = "Admin"
                 };
                 await userManager.CreateAsync(admin, AdminPassword);
+                await userManager.AddClaimAsync(admin, new Claim("FullName", admin.FullName));
             }
             if (!await userManager.IsInRoleAsync(admin, Roles.Admin))
                 await userManager.AddToRoleAsync(admin, Roles.Admin);

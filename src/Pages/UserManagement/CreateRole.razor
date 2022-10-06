@@ -1,0 +1,44 @@
+﻿<MudDialog ClassActions="ma-4">
+    <DialogContent>
+        <MudForm @ref="_form" Class="px-2">
+            <MudTextField T="string"
+                          Label="Name"
+                          Required="true"
+                          RequiredError="The Name field is required!"
+                          @bind-Value="_name" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Transparent"
+                   Variant="Variant.Filled"
+                   Size="Size.Small"
+                   OnClick="Cancel">
+            Cancel
+        </MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Size="Size.Small"
+                   OnClick="Create">
+            Create
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private MudForm _form = null!;
+    private string? _name = null;
+
+    [CascadingParameter]
+    private MudDialogInstance _mudDialog { get; set; } = null!;
+
+    private async Task Create()
+    {
+        await _form.Validate();
+        if (_form.IsValid)
+        {
+            _mudDialog.Close(DialogResult.Ok(_name));
+        }
+    }
+
+    private void Cancel() => _mudDialog.Cancel();
+}

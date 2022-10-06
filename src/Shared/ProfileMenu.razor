@@ -3,12 +3,11 @@
 <MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
     <ActivatorContent>
         <MudAvatar Class="bg-dark-pink" style="width: 34px; height: 34px;">
-            @Initial
+            @FullName[0]
         </MudAvatar>
     </ActivatorContent>
     <ChildContent>
         <PersonCard Class="mt-n2"
-                    Initial="@Initial"
                     FullName="@FullName"
                     Role="@Role" />
         <MudDivider Class="mb-2" />

@@ -1,7 +1,8 @@
-﻿@page "/user-management"
-@inherits UserManagementBase
+﻿@page "/users"
+@inherits UsersBase
+@attribute [Authorize(Roles = MudBlazorTemplate.Roles.Admin)]
 
-<PageTitle>User Management</PageTitle>
+<PageTitle>Users</PageTitle>
 
 <MudTable Items="Users"
           Hover="true"
@@ -57,6 +58,3 @@
         <MudTablePager />
     </PagerContent>
 </MudTable>
-
-
-

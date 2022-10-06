@@ -3,10 +3,12 @@
 <MudThemeProvider Theme="@DefaultTheme"
                   @ref="@MudThemeProvider"
                   @bind-IsDarkMode="@IsDarkMode" />
-<MudDialogProvider Position="DialogPosition.TopCenter"
-                   MaxWidth="MaxWidth.Small"
+<MudDialogProvider FullWidth="true"
+                   MaxWidth="MaxWidth.ExtraSmall"
+                   Position="DialogPosition.TopCenter"
                    CloseButton="true"
-                   CloseOnEscapeKey="true" />
+                   CloseOnEscapeKey="true"
+                   DisableBackdropClick="true" />
 <MudSnackbarProvider />
 
 <MudLayout>

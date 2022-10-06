@@ -7,10 +7,11 @@ using MudBlazorTemplate.Data.Entities;
 using MudBlazorTemplate.Extensions;
 using MudBlazorTemplate.Models;
 using MudBlazorTemplate.Shared;
+using System.Security.Claims;
 
 namespace MudBlazorTemplate.Pages.UserManagement
 {
-    public class UserManagementBase : ComponentBase
+    public class UsersBase : ComponentBase
     {
         [Inject]
         private ISnackbar _snackbar { get; set; } = null!;
@@ -71,9 +72,12 @@ namespace MudBlazorTemplate.Pages.UserManagement
                     Email = userData.Email,
                     UserName = userData.Email
                 };
+
                 var identityResult = await _userManager.CreateAsync(user, userData.Password);
+
                 if (identityResult.Succeeded)
                 {
+                    await _userManager.AddClaimAsync(user, new Claim("FullName", user.FullName));
                     _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.FirstName),
                         Severity.Success);
                     Users.Add(user);
@@ -91,7 +95,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
             var currentRoles = await _userManager.GetRolesAsync(user);
 
             var parameters = new DialogParameters();
-            parameters.Add("Roles", currentRoles);
+            parameters.Add("UserRoles", currentRoles);
             parameters.Add("SelectMultipleRoles", true);
 
             var result = await _dialogService
@@ -136,9 +140,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
         {
             var parameters = new DialogParameters();
             parameters.Add("Title", "Delete user");
-            parameters.Add("Content",
-                $"Are you really sure you want to delete \"{user.FullName}?\" This cannot be undone!");
-            var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = false };
+            parameters.Add("Content", $"Are you really sure you want to delete \"{user.FullName}\"?");
 
             var result = await _dialogService.Show<DeleteConfirmation>("", parameters).Result;
 

@@ -1,7 +1,7 @@
 ﻿<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
     <MudCardHeader>
         <CardHeaderAvatar>
-            <MudAvatar Class="bg-dark-pink">@Initial</MudAvatar>
+            <MudAvatar Class="bg-dark-pink">@FullName[0]</MudAvatar>
         </CardHeaderAvatar>
         <CardHeaderContent>
             <MudText Typo="Typo.body2">@FullName</MudText>
@@ -13,9 +13,6 @@
 @code {
     [Parameter]
     public string FullName { get; set; } = null!;
-
-    [Parameter]
-    public char Initial { get; set; }
 
     [Parameter]
     public string? Role { get; set; }

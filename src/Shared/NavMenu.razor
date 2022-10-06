@@ -4,11 +4,14 @@
             Home
         </MudNavLink>
         <AuthorizeView Roles="@Roles.Admin">
-            <MudNavLink Href="user-management"
-                        Match="NavLinkMatch.Prefix"
-                        Icon="@Icons.Filled.ManageAccounts">
-                Users
-            </MudNavLink>
+            <MudNavGroup Title="Settings" Icon="@Icons.Filled.AdminPanelSettings">
+                <MudNavLink Href="users" Match="NavLinkMatch.Prefix">
+                    Users
+                </MudNavLink>
+                <MudNavLink Href="roles" Match="NavLinkMatch.Prefix">
+                    Roles
+                </MudNavLink>
+            </MudNavGroup>
         </AuthorizeView>
     </MudNavMenu>
 </MudPaper>

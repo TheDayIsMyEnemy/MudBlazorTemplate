@@ -9,5 +9,8 @@ namespace MudBlazorTemplate.Extensions
 
         public static string? GetRole(this ClaimsPrincipal claimsPrincipal)
             => claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+
+        public static string? GetFullName(this ClaimsPrincipal claimsPrincipal)
+            => claimsPrincipal.FindFirstValue("FullName");
     }
 }

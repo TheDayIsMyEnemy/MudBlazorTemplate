@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using MudBlazorTemplate;
 using MudBlazorTemplate.Areas.Identity;
 using MudBlazorTemplate.Data;
 using MudBlazorTemplate.Data.Entities;
@@ -23,15 +25,27 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
 });
 #endif
 
-builder.Services.AddDefaultIdentity<User>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddDefaultIdentity<User>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "MudBlazorTemplate";
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    options.LoginPath = Constants.LoginPath;
+    options.LogoutPath = Constants.LogoutPath;
+    options.SlidingExpiration = true;
+    options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+});
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
-
-builder.Services.AddTransient<UserManager<User>>();
 
 builder.Services.AddScoped<AuthenticationStateProvider,
     RevalidatingIdentityAuthenticationStateProvider<User>>();
