@@ -10,9 +10,9 @@ Blazor Server Template using MudBlazor
 
 ### Branches Content
 
-- [Main](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/main) includes MudBlazor setup and Dark Theme
+- [Basic](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/basic) includes MudBlazor setup and Dark Theme
 - [Sql](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/sql) includes EF Core and SQL Server setup
-- [User Management](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/user-management) includes all the features
+- [Main](https://github.com/TheDayIsMyEnemy/MudBlazorTemplate/tree/main) includes all the features
 
 ### Features
 
