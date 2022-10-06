@@ -2,20 +2,20 @@
     <DialogContent>
         <MudForm @ref="_form" Class="px-2">
             <MudSelect T="string"
-                       Label="Roles"
-                       MultiSelection="true"
+                       Label="Select Roles"
+                       MultiSelection="SelectMultipleRoles"
                        AnchorOrigin="Origin.BottomCenter"
-                       @bind-SelectedValues="CurrentRoles">
-                @foreach (var role in Roles.List)
+                       @bind-SelectedValues="Roles">
+                @foreach (var role in MudBlazorTemplate.Roles.List)
                 {
                     <MudSelectItem Value="@role" />
                 }
-            </MudSelect>
+            </MudSelect>    
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Secondary"
-                   Variant="Variant.Filled"
+        <MudButton Color="Color.Transparent"
+                   Variant="Variant.Outlined"
                    Size="Size.Small"
                    OnClick="Cancel">
             Cancel
@@ -23,8 +23,8 @@
         <MudButton Color="Color.Primary"
                    Variant="Variant.Filled"
                    Size="Size.Small"
-                   OnClick="Submit">
-            Save
+                   OnClick="Assign">
+            Assign
         </MudButton>
     </DialogActions>
 </MudDialog>
@@ -36,14 +36,17 @@
     private MudDialogInstance _mudDialog { get; set; } = null!;
 
     [Parameter]
-    public IEnumerable<string> CurrentRoles { get; set; } = null!;
+    public IEnumerable<string> Roles { get; set; } = null!;
 
-    private async Task Submit()
+    [Parameter]
+    public bool SelectMultipleRoles { get; set; }
+
+    private async Task Assign()
     {
         await _form.Validate();
         if (_form.IsValid)
         {
-            _mudDialog.Close(DialogResult.Ok(CurrentRoles));
+            _mudDialog.Close(DialogResult.Ok(Roles));
         }
     }
 

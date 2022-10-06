@@ -1,32 +1,40 @@
-﻿using MudBlazorTemplate.Data.Entities;
-using MudBlazorTemplate.Shared;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
-using static MudBlazorTemplate.Areas.Identity.Pages.Account.RegisterModel;
+using MudBlazorTemplate.Data.Entities;
+using MudBlazorTemplate.Extensions;
+using MudBlazorTemplate.Models;
+using MudBlazorTemplate.Shared;
 
-namespace MudBlazorTemplate.Pages.Users
+namespace MudBlazorTemplate.Pages.UserManagement
 {
-    public class UsersBase : ComponentBase
+    public class UserManagementBase : ComponentBase
     {
         [Inject]
-        private UserManager<User> _userManager { get; set; } = null!;
+        private ISnackbar _snackbar { get; set; } = null!;
 
         [Inject]
         private IDialogService _dialogService { get; set; } = null!;
 
         [Inject]
-        private ISnackbar _snackbar { get; set; } = null!;
+        private UserManager<User> _userManager { get; set; } = null!;
 
-        protected List<User> Users { get; set; } = new();
-        protected string? SearchQuery { get; set; }
+        [CascadingParameter]
+        private Task<AuthenticationState> _authStateTask { get; set; } = null!;
+
         protected bool IsLoading { get; set; }
+        protected string? SearchQuery { get; set; }
+        protected string CurrentUserId { get; set; } = null!;
+        protected List<User> Users { get; set; } = new();
 
         private async Task LoadUsers()
         {
             IsLoading = true;
             Users = await _userManager.Users.ToListAsync();
+            var authState = await _authStateTask;
+            CurrentUserId = authState.User.GetId()!;
             IsLoading = false;
         }
 
@@ -41,31 +49,29 @@ namespace MudBlazorTemplate.Pages.Users
                 return true;
             if (user.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
-            if (!string.IsNullOrWhiteSpace(user.FirstName) && 
-                user.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            if (user.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
-            if (!string.IsNullOrWhiteSpace(user.LastName) && 
-                user.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            if (user.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;
         }
 
-        protected async Task CreateNewUser()
+        protected async Task CreateUser()
         {
-            var result = await _dialogService.Show<CreateNewUser>("Add new User").Result;
+            var result = await _dialogService.Show<CreateUser>("Create user").Result;
 
             if (!result.Cancelled)
             {
-                var userAccount = (CreateUserAccount)result.Data;
+                var userData = (CreateUserDto)result.Data;
                 var user = new User
                 {
-                    FirstName = userAccount.FirstName,
-                    LastName = userAccount.LastName,
-                    Email = userAccount.Email,
-                    UserName = userAccount.Email
+                    FirstName = userData.FirstName,
+                    LastName = userData.LastName,
+                    Email = userData.Email,
+                    UserName = userData.Email
                 };
-                var identityResult = await _userManager.CreateAsync(user, userAccount.Password);
+                var identityResult = await _userManager.CreateAsync(user, userData.Password);
                 if (identityResult.Succeeded)
                 {
                     _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.FirstName),
@@ -80,11 +86,16 @@ namespace MudBlazorTemplate.Pages.Users
             }
         }
 
-        protected async Task AddToRoles(User user)
+        protected async Task AssignRoles(User user)
         {
             var currentRoles = await _userManager.GetRolesAsync(user);
-            var dialogParams = new DialogParameters { ["currentRoles"] = currentRoles };
-            var result = await _dialogService.Show<AddToRoles>("Add to Roles", dialogParams).Result;
+
+            var parameters = new DialogParameters();
+            parameters.Add("Roles", currentRoles);
+            parameters.Add("SelectMultipleRoles", true);
+
+            var result = await _dialogService
+                .Show<AssignRoles>("Assign Roles", parameters).Result;
 
             if (!result.Cancelled)
             {
@@ -123,12 +134,13 @@ namespace MudBlazorTemplate.Pages.Users
 
         protected async Task DeleteUser(User user)
         {
-            var dialogParams = new DialogParameters
-            {
-                ["TitleText"] = "Delete User",
-                ["ContentText"] = $"Are you sure you want to delete {user.FullName}?"
-            };
-            var result = await _dialogService.Show<DeleteEntityModal>("", dialogParams).Result;
+            var parameters = new DialogParameters();
+            parameters.Add("Title", "Delete user");
+            parameters.Add("Content",
+                $"Are you really sure you want to delete \"{user.FullName}?\" This cannot be undone!");
+            var options = new DialogOptions { MaxWidth = MaxWidth.Small, FullWidth = false };
+
+            var result = await _dialogService.Show<DeleteConfirmation>("", parameters).Result;
 
             if (!result.Cancelled)
             {

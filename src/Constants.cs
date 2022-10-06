@@ -11,7 +11,12 @@
     public static class Roles
     {
         public const string Admin = "Administrator";
-
         public static string[] List = new string[] { Admin };
+    }
+
+    public static class Constants
+    {
+        public const string LoginPath = "Identity/Account/Login";
+        public const string LogoutPath = "Identity/Account/Logout";
     }
 }

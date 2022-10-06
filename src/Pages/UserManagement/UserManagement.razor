@@ -1,7 +1,7 @@
-﻿@page "/users"
-@inherits UsersBase
+﻿@page "/user-management"
+@inherits UserManagementBase
 
-<PageTitle>Users</PageTitle>
+<PageTitle>User Management</PageTitle>
 
 <MudTable Items="Users"
           Hover="true"
@@ -12,7 +12,7 @@
                 Color="Color.Primary"
                 Size="Size.Small"
                 Class="fab"
-                OnClick="CreateNewUser" />
+                OnClick="CreateUser" />
         <MudSpacer />
         <MudTextField @bind-Value="SearchQuery"
                       Placeholder="Search"
@@ -33,20 +33,23 @@
         <MudTd DataLabel="Email">@context.Email</MudTd>
         <MudTd DataLabel="Actions">
             <MudStack Row="true">
-                <MudTooltip Placement="Placement.Top" Text="Add to Roles">
+                <MudTooltip Placement="Placement.Top" Text="Assign Roles">
                     <MudIconButton Icon="@Icons.Filled.Edit"
                                    Color="Color.Primary"
                                    Size="Size.Small"
-                                   OnClick="(e) => AddToRoles(context)">
+                                   OnClick="(e) => AssignRoles(context)">
                     </MudIconButton>
                 </MudTooltip>
-                <MudTooltip Placement="Placement.Top" Text="Delete">
-                    <MudIconButton Icon="@Icons.Filled.Delete"
+                @if (CurrentUserId != context.Id)
+                {
+                    <MudTooltip Placement="Placement.Top" Text="Delete">
+                        <MudIconButton Icon="@Icons.Filled.Delete"
                                    Color="Color.Error"
                                    Size="Size.Small"
                                    OnClick="(e) => DeleteUser(context)">
-                    </MudIconButton>
-                </MudTooltip>
+                        </MudIconButton>
+                    </MudTooltip>
+                }
             </MudStack>
         </MudTd>
     </RowTemplate>

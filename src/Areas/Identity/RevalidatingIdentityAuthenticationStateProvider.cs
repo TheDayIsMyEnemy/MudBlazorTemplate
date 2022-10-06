@@ -12,18 +12,21 @@ namespace MudBlazorTemplate.Areas.Identity
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IdentityOptions _options;
+        private readonly NavigationManager _navManager;
 
         public RevalidatingIdentityAuthenticationStateProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
-            IOptions<IdentityOptions> optionsAccessor)
+            IOptions<IdentityOptions> optionsAccessor,
+            NavigationManager navManager)
             : base(loggerFactory)
         {
             _scopeFactory = scopeFactory;
             _options = optionsAccessor.Value;
+            _navManager = navManager;
         }
 
-        protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(30);
+        protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(1);
 
         protected override async Task<bool> ValidateAuthenticationStateAsync(
             AuthenticationState authenticationState, CancellationToken cancellationToken)
@@ -53,6 +56,7 @@ namespace MudBlazorTemplate.Areas.Identity
             var user = await userManager.GetUserAsync(principal);
             if (user == null)
             {
+                _navManager.NavigateTo(Constants.LogoutPath, true);
                 return false;
             }
             else if (!userManager.SupportsUserSecurityStamp)

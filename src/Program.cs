@@ -1,11 +1,10 @@
-using MudBlazorTemplate.Areas.Identity;
-using MudBlazorTemplate.Data;
-using MudBlazorTemplate.Data.Entities;
-using MudBlazorTemplate.Utilities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using MudBlazorTemplate.Areas.Identity;
+using MudBlazorTemplate.Data;
+using MudBlazorTemplate.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -58,6 +57,6 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-await DatabaseInitializer.SeedData(app.Services);
+await DbInitializer.ApplyMigrationsAndSeedData(app.Services);
 
 app.Run();

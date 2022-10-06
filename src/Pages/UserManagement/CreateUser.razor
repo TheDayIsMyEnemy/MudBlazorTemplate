@@ -1,8 +1,4 @@
-﻿@using System.Text.RegularExpressions
-@using System.ComponentModel.DataAnnotations
-@using static MudBlazorTemplate.Areas.Identity.Pages.Account.RegisterModel
-
-<MudDialog ClassActions="ma-4">
+﻿<MudDialog ClassActions="ma-4">
     <DialogContent>
         <MudForm @ref="_form" Class="px-2">
             <MudStack Row="true">
@@ -10,12 +6,12 @@
                               Label="First Name"
                               Required="true"
                               RequiredError="The FirstName field is required!"
-                              @bind-Value="_userAccount.FirstName" />
+                              @bind-Value="_user.FirstName" />
                 <MudTextField T="string"
                               Label="Last Name"
                               Required="true"
                               RequiredError="The LastName field is required!"
-                              @bind-Value="_userAccount.LastName" />
+                              @bind-Value="_user.LastName" />
             </MudStack>
             <MudStack Row="true">
                 <MudTextField T="string"
@@ -23,39 +19,45 @@
                               Required="true"
                               RequiredError="Email is required!"
                               Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"
-                              @bind-Value="_userAccount.Email" />
+                              @bind-Value="_user.Email" />
                 <MudTextField T="string"
                               Label="Password"
                               InputType="InputType.Password"
                               Required="true"
                               RequiredError="Password is required!"
-                              @bind-Value="_userAccount.Password" />
+                              @bind-Value="_user.Password" />
             </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Secondary" Variant="Variant.Filled" Size="Size.Small" OnClick="Cancel">
+        <MudButton Color="Color.Transparent"
+                   Variant="Variant.Outlined"
+                   Size="Size.Small"
+                   OnClick="Cancel">
             Cancel
         </MudButton>
-        <MudButton Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small" OnClick="Submit">
-            Submit
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Size="Size.Small"
+                   OnClick="Create">
+            Create
         </MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
     private MudForm _form = null!;
-    private CreateUserAccount _userAccount = new();
+    private CreateUserDto _user = new();
 
     [CascadingParameter]
     private MudDialogInstance _mudDialog { get; set; } = null!;
 
-    private async Task Submit()
+    private async Task Create()
     {
         await _form.Validate();
         if (_form.IsValid)
         {
-            _mudDialog.Close(DialogResult.Ok(_userAccount));
+            _mudDialog.Close(DialogResult.Ok(_user));
         }
     }
 
