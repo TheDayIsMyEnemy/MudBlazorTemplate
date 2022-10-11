@@ -7,6 +7,7 @@ using MudBlazorTemplate.Data.Entities;
 using MudBlazorTemplate.Extensions;
 using MudBlazorTemplate.Models;
 using MudBlazorTemplate.Shared;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace MudBlazorTemplate.Pages.UserManagement
@@ -136,11 +137,37 @@ namespace MudBlazorTemplate.Pages.UserManagement
             }
         }
 
+        protected async Task BlockOrUnblockUser(User user)
+        {
+            var parameters = new DialogParameters();
+            var action = user.IsBlocked ? "unblock" : "block";
+            parameters.Add("Title", $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(action)} user");
+            parameters.Add("Content", $"Are you sure you want to {action} \"{user.FullName}\"?");
+            parameters.Add("ButtonText", action);
+
+            var result = await _dialogService.Show<DialogTemplate>("", parameters).Result;
+
+            if (!result.Cancelled)
+            {
+                user.IsBlocked = !user.IsBlocked;
+                var identityResult = await _userManager.UpdateAsync(user);
+                if (identityResult.Succeeded)
+                {
+                    _snackbar.Add($"{user.FullName} has been {action}ed!", Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(string.Join(Environment.NewLine,
+                        identityResult.Errors.Select(e => e.Description)), Severity.Error);
+                }
+            }
+        }
+
         protected async Task DeleteUser(User user)
         {
             var parameters = new DialogParameters();
             parameters.Add("Title", "Delete user");
-            parameters.Add("Content", $"Are you really sure you want to delete \"{user.FullName}\"?");
+            parameters.Add("Content", $"Are you sure you want to delete \"{user.FullName}\"?");
 
             var result = await _dialogService.Show<DeleteConfirmation>("", parameters).Result;
 

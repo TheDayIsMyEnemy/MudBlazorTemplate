@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using MudBlazorTemplate.Data.Entities;
 using System.Security.Claims;
 
 namespace MudBlazorTemplate.Areas.Identity
 {
-    public class RevalidatingIdentityAuthenticationStateProvider<TUser>
-        : RevalidatingServerAuthenticationStateProvider where TUser : class
+    public class RevalidatingIdentityAuthenticationStateProvider
+        : RevalidatingServerAuthenticationStateProvider
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IdentityOptions _options;
@@ -35,7 +36,7 @@ namespace MudBlazorTemplate.Areas.Identity
             var scope = _scopeFactory.CreateScope();
             try
             {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<TUser>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 return await ValidateSecurityStampAsync(userManager, authenticationState.User);
             }
             finally
@@ -51,10 +52,10 @@ namespace MudBlazorTemplate.Areas.Identity
             }
         }
 
-        private async Task<bool> ValidateSecurityStampAsync(UserManager<TUser> userManager, ClaimsPrincipal principal)
+        private async Task<bool> ValidateSecurityStampAsync(UserManager<User> userManager, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
-            if (user == null)
+            if (user == null || user.IsBlocked)
             {
                 _navManager.NavigateTo(Constants.LogoutPath, true);
                 return false;
