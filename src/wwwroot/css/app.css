@@ -22,6 +22,10 @@
     background-color: #ff4081ff !important;
 }
 
+.list-item .mud-list-item-icon {
+    min-width: 38px !important;
+}
+
 @media only screen and (max-width: 600px) {
     .mud-table-container {
         height: 270px;

@@ -33,33 +33,29 @@
         <MudTd DataLabel="Last Name">@context.LastName</MudTd>
         <MudTd DataLabel="Email">@context.Email</MudTd>
         <MudTd DataLabel="Actions">
-            <MudStack Row="true">
-                <MudTooltip Placement="Placement.Top" Text="Assign Roles">
-                    <MudIconButton Icon="@Icons.Filled.Edit"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   OnClick="(e) => AssignRoles(context)">
-                    </MudIconButton>
-                </MudTooltip>
+            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz"
+                     Dense="true"
+                     ListClass="list-item">
+                <MudMenuItem Icon="@Icons.Filled.AssignmentInd"
+                             IconSize="Size.Small"
+                             OnClick="(e) => AssignRoles(context)">
+                    Assign Roles
+                </MudMenuItem>
                 @if (CurrentUserId != context.Id)
                 {
-                    <MudTooltip Placement="Placement.Top"
-                            Text="@(context.IsBlocked ? "Unblock" : "Block")">
-                        <MudIconButton Icon="@Icons.Filled.Block"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   OnClick="(e) => BlockOrUnblockUser(context)">
-                        </MudIconButton>
-                    </MudTooltip>
-                    <MudTooltip Placement="Placement.Top" Text="Delete">
-                        <MudIconButton Icon="@Icons.Filled.Delete"
-                                   Color="Color.Error"
-                                   Size="Size.Small"
-                                   OnClick="(e) => DeleteUser(context)">
-                        </MudIconButton>
-                    </MudTooltip>
+                    <MudMenuItem Icon="@Icons.Filled.Block"
+                             IconSize="Size.Small"
+                             OnClick="(e) => BlockOrUnblockUser(context)">
+                        @(context.IsBlocked ? "Unblock" : "Block")
+                    </MudMenuItem>
+                    <MudMenuItem Icon="@Icons.Filled.Delete"
+                             IconColor="Color.Error"
+                             IconSize="Size.Small"
+                             OnClick="(e) => DeleteUser(context)">
+                        Delete
+                    </MudMenuItem>
                 }
-            </MudStack>
+            </MudMenu>
         </MudTd>
     </RowTemplate>
     <PagerContent>
