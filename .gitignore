@@ -351,4 +351,3 @@ MigrationBackup/
 
 /src/appsettings.Production.json
 /src/Data/Migrations/
-/src/Areas/Identity/Pages/Account
