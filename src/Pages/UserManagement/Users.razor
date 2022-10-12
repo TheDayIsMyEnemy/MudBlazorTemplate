@@ -41,16 +41,16 @@
                                    OnClick="(e) => AssignRoles(context)">
                     </MudIconButton>
                 </MudTooltip>
-                <MudTooltip Placement="Placement.Top"
+                @if (CurrentUserId != context.Id)
+                {
+                    <MudTooltip Placement="Placement.Top"
                             Text="@(context.IsBlocked ? "Unblock" : "Block")">
-                    <MudIconButton Icon="@Icons.Filled.Block"
+                        <MudIconButton Icon="@Icons.Filled.Block"
                                    Color="Color.Primary"
                                    Size="Size.Small"
                                    OnClick="(e) => BlockOrUnblockUser(context)">
-                    </MudIconButton>
-                </MudTooltip>
-                @if (CurrentUserId != context.Id)
-                {
+                        </MudIconButton>
+                    </MudTooltip>
                     <MudTooltip Placement="Placement.Top" Text="Delete">
                         <MudIconButton Icon="@Icons.Filled.Delete"
                                    Color="Color.Error"

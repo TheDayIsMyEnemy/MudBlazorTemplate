@@ -125,16 +125,12 @@ namespace MudBlazorTemplate.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user.IsBlocked)
-                    {
-                        _logger.LogInformation($"Blocked user: {user} tried to log in.");
-                        await _signInManager.SignOutAsync();
-                        return Page();
-                    }
-
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect("/");
+                }
+                if (result.IsNotAllowed)
+                {
+                    return RedirectToPage("./AccessDenied");
                 }
                 //if (result.RequiresTwoFactor)
                 //{

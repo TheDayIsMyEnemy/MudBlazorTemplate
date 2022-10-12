@@ -8,15 +8,12 @@ namespace MudBlazorTemplate.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Ignore(p => p.FullName);
             builder
                 .Property(p => p.FirstName)
-                .HasMaxLength(MaximumLengths.StringColumn)
-                .IsRequired();
+                .HasMaxLength(MaximumLengths.StringColumn);
             builder
                 .Property(p => p.LastName)
-                .HasMaxLength(MaximumLengths.StringColumn)
-                .IsRequired();
+                .HasMaxLength(MaximumLengths.StringColumn);
         }
     }
 }

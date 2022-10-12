@@ -9,13 +9,13 @@ namespace MudBlazorTemplate.Shared
         [CascadingParameter]
         private Task<AuthenticationState> _authStateTask { get; set; } = null!;
 
-        protected string FullName { get; set; } = null!;
+        protected string Name { get; set; } = null!;
         protected string? Role { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             var authState = await _authStateTask;
-            FullName = authState.User.GetFullName()!;
+            Name = authState.User.GetName()!;
             Role = authState.User.GetRole();
         }
     }

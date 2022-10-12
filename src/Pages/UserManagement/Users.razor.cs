@@ -7,8 +7,6 @@ using MudBlazorTemplate.Data.Entities;
 using MudBlazorTemplate.Extensions;
 using MudBlazorTemplate.Models;
 using MudBlazorTemplate.Shared;
-using System.Globalization;
-using System.Security.Claims;
 
 namespace MudBlazorTemplate.Pages.UserManagement
 {
@@ -51,9 +49,11 @@ namespace MudBlazorTemplate.Pages.UserManagement
                 return true;
             if (user.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
-            if (user.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(user.FirstName)
+                && user.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
-            if (user.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(user.LastName)
+                && user.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;
@@ -78,15 +78,16 @@ namespace MudBlazorTemplate.Pages.UserManagement
 
                 if (identityResult.Succeeded)
                 {
-                    await _userManager.AddClaimAsync(user, new Claim("FullName", user.FullName));
-                    _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.FirstName),
+                    _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.Email),
                         Severity.Success);
                     Users.Add(user);
                 }
                 else
                 {
-                    _snackbar.Add(string.Join(Environment.NewLine,
-                        identityResult.Errors.Select(e => e.Description)), Severity.Error);
+                    _snackbar.Add(
+                        string.Join(Environment.NewLine,
+                            identityResult.Errors.Select(e => e.Description)),
+                        Severity.Error);
                 }
             }
         }
@@ -131,7 +132,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
                 }
                 if (identityResult != null)
                 {
-                    _snackbar.Add(string.Format(Messages.SuccessfulUpdateFormat, user.FullName),
+                    _snackbar.Add(string.Format(Messages.SuccessfulUpdateFormat, user.Email),
                         Severity.Success);
                 }
             }
@@ -139,27 +140,19 @@ namespace MudBlazorTemplate.Pages.UserManagement
 
         protected async Task BlockOrUnblockUser(User user)
         {
-            var parameters = new DialogParameters();
             var action = user.IsBlocked ? "unblock" : "block";
-            parameters.Add("Title", $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(action)} user");
-            parameters.Add("Content", $"Are you sure you want to {action} \"{user.FullName}\"?");
-            parameters.Add("ButtonText", action);
 
-            var result = await _dialogService.Show<DialogTemplate>("", parameters).Result;
+            user.IsBlocked = !user.IsBlocked;
+            var identityResult = await _userManager.UpdateAsync(user);
 
-            if (!result.Cancelled)
+            if (identityResult.Succeeded)
             {
-                user.IsBlocked = !user.IsBlocked;
-                var identityResult = await _userManager.UpdateAsync(user);
-                if (identityResult.Succeeded)
-                {
-                    _snackbar.Add($"{user.FullName} has been {action}ed!", Severity.Success);
-                }
-                else
-                {
-                    _snackbar.Add(string.Join(Environment.NewLine,
-                        identityResult.Errors.Select(e => e.Description)), Severity.Error);
-                }
+                _snackbar.Add($"User {user.Email} has been {action}ed.", Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(string.Join(Environment.NewLine,
+                    identityResult.Errors.Select(e => e.Description)), Severity.Error);
             }
         }
 
@@ -167,7 +160,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
         {
             var parameters = new DialogParameters();
             parameters.Add("Title", "Delete user");
-            parameters.Add("Content", $"Are you sure you want to delete \"{user.FullName}\"?");
+            parameters.Add("Content", $"Are you sure you want to delete \"{user.Email}\"?");
 
             var result = await _dialogService.Show<DeleteConfirmation>("", parameters).Result;
 
@@ -177,7 +170,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
                 if (identityResult.Succeeded)
                 {
                     _snackbar.Add(
-                        string.Format(Messages.SuccessfulDeletionFormat, user.FullName),
+                        string.Format(Messages.SuccessfulDeletionFormat, user.Email),
                         Severity.Success);
                     Users.Remove(user);
                 }

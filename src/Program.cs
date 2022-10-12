@@ -28,9 +28,11 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
 builder.Services.AddDefaultIdentity<User>(options =>
 {
     options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedAccount = true;
 })
 .AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<AppDbContext>();
+.AddEntityFrameworkStores<AppDbContext>()
+.AddUserConfirmation<UserConfirmation>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

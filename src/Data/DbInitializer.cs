@@ -1,7 +1,6 @@
-﻿using MudBlazorTemplate.Data.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using MudBlazorTemplate.Data.Entities;
 
 namespace MudBlazorTemplate.Data
 {
@@ -34,12 +33,9 @@ namespace MudBlazorTemplate.Data
                 admin = new User
                 {
                     UserName = AdminEmail,
-                    Email = AdminEmail,
-                    FirstName = "Almighty",
-                    LastName = "Admin"
+                    Email = AdminEmail
                 };
                 await userManager.CreateAsync(admin, AdminPassword);
-                await userManager.AddClaimAsync(admin, new Claim("FullName", admin.FullName));
             }
             if (!await userManager.IsInRoleAsync(admin, Roles.Admin))
                 await userManager.AddToRoleAsync(admin, Roles.Admin);
