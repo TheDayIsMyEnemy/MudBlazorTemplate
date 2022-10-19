@@ -3,13 +3,14 @@
 <MudThemeProvider Theme="@DefaultTheme"
                   @ref="@MudThemeProvider"
                   @bind-IsDarkMode="@IsDarkMode" />
+
 <MudDialogProvider FullWidth="true"
                    MaxWidth="MaxWidth.ExtraSmall"
                    Position="DialogPosition.TopCenter"
-                   CloseButton="true"
                    CloseOnEscapeKey="true"
                    DisableBackdropClick="true" />
-<MudSnackbarProvider />
+
+<MudSnackbarProvider  />
 
 <MudLayout>
     <MudAppBar Elevation="1">
@@ -25,12 +26,12 @@
     </MudAppBar>
     <MudDrawer @bind-Open="IsDrawerOpened" Elevation="1" ClipMode="DrawerClipMode.Never">
         <MudDrawerHeader Class="justify-center">
-            <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Size="Size.Large" />
+            <MudIcon Icon="@Icons.Filled.Api" Size="Size.Large" />
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-4 h-100">
             @Body
         </MudContainer>
     </MudMainContent>

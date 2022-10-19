@@ -1,0 +1,46 @@
+﻿<MudDialog ClassActions="ma-4">
+    <DialogContent>
+        <EditForm Model="@_model" OnValidSubmit="Submit" id="create-user-form" Class="px-2">
+            <DataAnnotationsValidator />
+            <MudTextField Label="Email" OnlyValidateIfDirty="true" For="@(() => _model.Email)" @bind-Value="_model.Email" />
+            <MudTextField Label="Password" OnlyValidateIfDirty="true" For="@(() => _model.Password)" @bind-Value="_model.Password" />
+            <MudTextField Label="First Name" @bind-Value="_model.FirstName" />
+            <MudTextField Label="Last Name" @bind-Value="_model.LastName" />
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Transparent" Variant="Variant.Filled" Size="Size.Small" OnClick="_mudDialog.Cancel">
+            Cancel
+        </MudButton>
+        <MudButton form="create-user-form" ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">
+            Create
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private CreateUserFormModel _model = new();
+    [CascadingParameter] private MudDialogInstance _mudDialog { get; set; } = null!;
+
+    private async Task Submit(EditContext context)
+    {
+        //_mudDialog.R
+        //_mudDialog.
+    }
+
+    public class CreateUserFormModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = null!;
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = null!;
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+    }
+}

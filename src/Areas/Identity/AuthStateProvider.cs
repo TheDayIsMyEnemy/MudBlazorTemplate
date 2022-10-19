@@ -1,30 +1,25 @@
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using MudBlazorTemplate.Data.Entities;
 using System.Security.Claims;
 
 namespace MudBlazorTemplate.Areas.Identity
 {
-    public class RevalidatingIdentityAuthenticationStateProvider
-        : RevalidatingServerAuthenticationStateProvider
+    public class AuthStateProvider<TUser>
+        : RevalidatingServerAuthenticationStateProvider where TUser : class
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IdentityOptions _options;
-        private readonly NavigationManager _navManager;
 
-        public RevalidatingIdentityAuthenticationStateProvider(
+        public AuthStateProvider(
             ILoggerFactory loggerFactory,
             IServiceScopeFactory scopeFactory,
-            IOptions<IdentityOptions> optionsAccessor,
-            NavigationManager navManager)
+            IOptions<IdentityOptions> optionsAccessor)
             : base(loggerFactory)
         {
             _scopeFactory = scopeFactory;
             _options = optionsAccessor.Value;
-            _navManager = navManager;
         }
 
         protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(1);
@@ -36,7 +31,7 @@ namespace MudBlazorTemplate.Areas.Identity
             var scope = _scopeFactory.CreateScope();
             try
             {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<TUser>>();
                 return await ValidateSecurityStampAsync(userManager, authenticationState.User);
             }
             finally
@@ -52,12 +47,11 @@ namespace MudBlazorTemplate.Areas.Identity
             }
         }
 
-        private async Task<bool> ValidateSecurityStampAsync(UserManager<User> userManager, ClaimsPrincipal principal)
+        private async Task<bool> ValidateSecurityStampAsync(UserManager<TUser> userManager, ClaimsPrincipal principal)
         {
             var user = await userManager.GetUserAsync(principal);
-            if (user == null || user.IsBlocked)
+            if (user == null)
             {
-                _navManager.NavigateTo(Constants.LogoutPath, true);
                 return false;
             }
             else if (!userManager.SupportsUserSecurityStamp)

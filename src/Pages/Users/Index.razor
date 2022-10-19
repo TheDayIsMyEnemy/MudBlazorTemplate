@@ -1,19 +1,19 @@
 ﻿@page "/users"
-@inherits UsersBase
+@inherits IndexBase
 @attribute [Authorize(Roles = MudBlazorTemplate.Roles.Admin)]
 
 <PageTitle>Users</PageTitle>
 
 <MudTable Items="Users"
           Hover="true"
-          Filter="new Func<User, bool>(Filter)"
+          Filter="new Func<User, bool>(FilterUsers)"
           Loading="IsLoading">
     <ToolBarContent>
         <MudFab StartIcon="@Icons.Filled.PersonAdd"
                 Color="Color.Primary"
                 Size="Size.Small"
                 Class="fab"
-                OnClick="CreateUser" />
+                OnClick="Create" />
         <MudSpacer />
         <MudTextField @bind-Value="SearchQuery"
                       Placeholder="Search"
@@ -33,9 +33,7 @@
         <MudTd DataLabel="Last Name">@context.LastName</MudTd>
         <MudTd DataLabel="Email">@context.Email</MudTd>
         <MudTd DataLabel="Actions">
-            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz"
-                     Dense="true"
-                     ListClass="list-item">
+            <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Dense="true" ListClass="list-item">
                 <MudMenuItem Icon="@Icons.Filled.AssignmentInd"
                              IconSize="Size.Small"
                              OnClick="(e) => AssignRoles(context)">

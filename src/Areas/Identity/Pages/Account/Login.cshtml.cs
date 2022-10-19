@@ -120,7 +120,7 @@ namespace MudBlazorTemplate.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(
                     Input.Email,
                     Input.Password,
-                    Input.RememberMe, 
+                    Input.RememberMe,
                     lockoutOnFailure: false);
 
                 if (result.Succeeded)

@@ -1,3 +1,7 @@
+.h-100 {
+    height: 100vh !important;
+}
+
 .icon-btn span svg {
     width: 0.9em;
     height: 0.9em;

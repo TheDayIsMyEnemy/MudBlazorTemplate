@@ -25,7 +25,7 @@
 </MudDialog>
 
 @code {
-    private MudForm _form = null!;
+    private MudForm? _form = new();
     private string? _name = null;
 
     [CascadingParameter]
@@ -33,7 +33,7 @@
 
     private async Task Create()
     {
-        await _form.Validate();
+        await _form!.Validate();
         if (_form.IsValid)
         {
             _mudDialog.Close(DialogResult.Ok(_name));

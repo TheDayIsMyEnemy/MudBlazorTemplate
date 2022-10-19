@@ -6,23 +6,17 @@ using MudBlazor;
 using MudBlazorTemplate.Data.Entities;
 using MudBlazorTemplate.Extensions;
 using MudBlazorTemplate.Models;
+using MudBlazorTemplate.Pages.Roles;
 using MudBlazorTemplate.Shared;
 
-namespace MudBlazorTemplate.Pages.UserManagement
+namespace MudBlazorTemplate.Pages.Users
 {
-    public class UsersBase : ComponentBase
+    public class IndexBase : ComponentBase
     {
-        [Inject]
-        private ISnackbar _snackbar { get; set; } = null!;
-
-        [Inject]
-        private IDialogService _dialogService { get; set; } = null!;
-
-        [Inject]
-        private UserManager<User> _userManager { get; set; } = null!;
-
-        [CascadingParameter]
-        private Task<AuthenticationState> _authStateTask { get; set; } = null!;
+        [Inject] private ISnackbar _snackbar { get; set; } = null!;
+        [Inject] private IDialogService _dialogService { get; set; } = null!;
+        [Inject] private UserManager<User> _userManager { get; set; } = null!;
+        [CascadingParameter] private Task<AuthenticationState> _authStateTask { get; set; } = null!;
 
         protected bool IsLoading { get; set; }
         protected string? SearchQuery { get; set; }
@@ -41,46 +35,44 @@ namespace MudBlazorTemplate.Pages.UserManagement
         protected override async Task OnInitializedAsync()
             => await LoadUsers();
 
-        protected bool Filter(User user) => FilterUsers(user, SearchQuery);
-
-        protected bool FilterUsers(User user, string? searchQuery)
+        protected bool FilterUsers(User user)
         {
-            if (string.IsNullOrWhiteSpace(searchQuery))
+            if (string.IsNullOrEmpty(SearchQuery))
                 return true;
-            if (user.Email.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            else if (user.Email.Includes(SearchQuery))
                 return true;
-            if (!string.IsNullOrWhiteSpace(user.FirstName)
-                && user.FirstName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            else if (user.FirstName.Includes(SearchQuery))
                 return true;
-            if (!string.IsNullOrWhiteSpace(user.LastName)
-                && user.LastName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+            else if (user.LastName.Includes(SearchQuery))
                 return true;
 
             return false;
         }
 
-        protected async Task CreateUser()
+        protected async Task Create()
         {
-            var result = await _dialogService.Show<CreateUser>("Create user").Result;
-
+            var dialog = _dialogService.Show<Create>("Create user");
+            var result = await dialog.Result;
+            //result.            //result
             if (!result.Cancelled)
             {
-                var userData = (CreateUserDto)result.Data;
+                var userData = (CreateUser)result.Data;
                 var user = new User
                 {
                     FirstName = userData.FirstName,
                     LastName = userData.LastName,
                     Email = userData.Email,
-                    UserName = userData.Email
+                    //UserName = userData.UserName
                 };
 
                 var identityResult = await _userManager.CreateAsync(user, userData.Password);
 
                 if (identityResult.Succeeded)
                 {
+                    Users.Add(user);
                     _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.Email),
                         Severity.Success);
-                    Users.Add(user);
+                    //dialog.Close();
                 }
                 else
                 {
@@ -107,8 +99,8 @@ namespace MudBlazorTemplate.Pages.UserManagement
             {
                 IdentityResult? identityResult = null;
                 var newRoles = (IEnumerable<string>)result.Data;
-                var rolesToRemove = currentRoles.Except(newRoles);
-                var rolesToAdd = newRoles.Except(currentRoles);
+                var rolesToAdd = newRoles.Except(currentRoles).ToList();
+                var rolesToRemove = currentRoles.Except(newRoles).ToList();
 
                 if (rolesToRemove.Any())
                 {
@@ -122,7 +114,7 @@ namespace MudBlazorTemplate.Pages.UserManagement
                 }
                 if (rolesToAdd.Any())
                 {
-                    identityResult = await _userManager.AddToRolesAsync(user, newRoles);
+                    identityResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
                     if (!identityResult.Succeeded)
                     {
                         _snackbar.Add(string.Join(Environment.NewLine,

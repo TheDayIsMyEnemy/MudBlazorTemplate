@@ -30,7 +30,7 @@
 </MudDialog>
 
 @code {
-    private MudForm _form = null!;
+    private MudForm? _form = new();
     private IEnumerable<string> Roles = Enumerable.Empty<string>();
 
     [Inject]
@@ -53,7 +53,7 @@
 
     private async Task Assign()
     {
-        await _form.Validate();
+        await _form!.Validate();
         if (_form.IsValid)
         {
             _mudDialog.Close(DialogResult.Ok(UserRoles));

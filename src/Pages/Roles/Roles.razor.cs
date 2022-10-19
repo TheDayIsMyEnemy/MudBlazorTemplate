@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazorTemplate.Shared;
 
-namespace MudBlazorTemplate.Pages.UserManagement
+namespace MudBlazorTemplate.Pages.Roles
 {
     public class RolesBase : ComponentBase
     {

@@ -1,14 +1,14 @@
 ﻿<MudPaper Elevation="0">
     <MudNavMenu Margin="Margin.Normal" Color="Color.Info">
-        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">
-            Home
+        <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">
+            Dashboard
         </MudNavLink>
         <AuthorizeView Roles="@Roles.Admin">
             <MudNavGroup Title="Settings" Icon="@Icons.Filled.AdminPanelSettings">
-                <MudNavLink Href="users" Match="NavLinkMatch.Prefix">
+                <MudNavLink Icon="@Icons.Filled.People" Href="users" Match="NavLinkMatch.Prefix">
                     Users
                 </MudNavLink>
-                <MudNavLink Href="roles" Match="NavLinkMatch.Prefix">
+                <MudNavLink Icon="@Icons.Filled.AddModerator" Href="roles" Match="NavLinkMatch.Prefix">
                     Roles
                 </MudNavLink>
             </MudNavGroup>

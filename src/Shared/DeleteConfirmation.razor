@@ -1,28 +1,18 @@
 ﻿<MudDialog ClassActions="ma-2">
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.DeleteForever"
-                     Color="Color.Error"
-                     Class="mr-3 mb-n1" />
+            <MudIcon Icon="@Icons.Material.Filled.DeleteForever" Color="Color.Error" Class="mr-3 mb-n1" />
             @Title
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudText>
-            @Content
-        </MudText>
+        <MudText>@Content</MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Transparent"
-                   Variant="Variant.Filled"
-                   Size="Size.Small"
-                   OnClick="Cancel">
+        <MudButton Color="Color.Transparent" Variant="Variant.Filled" Size="Size.Small" OnClick="Cancel">
             Cancel
         </MudButton>
-        <MudButton Color="Color.Error"
-                   Variant="Variant.Filled"
-                   Size="Size.Small"
-                   OnClick="Delete">
+        <MudButton Color="Color.Error" Variant="Variant.Filled" Size="Size.Small" OnClick="Delete">
             Delete
         </MudButton>
     </DialogActions>
