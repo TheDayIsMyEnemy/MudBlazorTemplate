@@ -1,0 +1,34 @@
+﻿<MudMenu Direction="Direction.Left" OffsetX="true" Dense="true" Class="mt-1 ml-4">
+    <ActivatorContent>
+        <MudAvatar Class="bg-dark-pink" style="width: 34px; height: 34px;">
+            @_name[0]
+        </MudAvatar>
+    </ActivatorContent>
+    <ChildContent>
+        <PersonCard Class="mt-n2"
+                    Name="@_name"
+                    Role="@_role" />
+        <MudDivider Class="mb-2" />
+        <form action="@Constants.LogoutPath">
+            <div class="d-flex align-center">
+                <MudIconButton ButtonType="ButtonType.Submit"
+                               Icon="@Icons.Material.Outlined.Login" />
+                <span class="ml-2">Log Out</span>
+            </div>
+        </form>
+    </ChildContent>
+</MudMenu>
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> _authStateTask { get; set; } = null!;
+    private string _name = string.Empty;
+    private string? _role = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authStateTask;
+        _name = authState.User.GetName()!;
+        _role = authState.User.GetRole();
+    }
+}

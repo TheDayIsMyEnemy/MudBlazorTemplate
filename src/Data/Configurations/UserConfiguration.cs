@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MudBlazorTemplate.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MudBlazorTemplate.Data.Configurations
 {
@@ -10,10 +8,10 @@ namespace MudBlazorTemplate.Data.Configurations
         {
             builder
                 .Property(p => p.FirstName)
-                .HasMaxLength(MaximumLengths.StringColumn);
+                .HasMaxLength(MaxLengths.StringColumn);
             builder
                 .Property(p => p.LastName)
-                .HasMaxLength(MaximumLengths.StringColumn);
+                .HasMaxLength(MaxLengths.StringColumn);
         }
     }
 }

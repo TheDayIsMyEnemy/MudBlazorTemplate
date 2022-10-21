@@ -1,10 +1,5 @@
 ﻿namespace MudBlazorTemplate
 {
-    public static class MaximumLengths
-    {
-        public const int StringColumn = 128;
-    }
-
     public static class Messages
     {
         public const string SuccessfulCreationFormat = "{0} has been created successfully.";
@@ -21,7 +16,12 @@
 
     public static class Constants
     {
-        public const string LoginPath = "/Identity/Account/Login";
-        public const string LogoutPath = "/Identity/Account/Logout";
+        public const string LoginPath = "/identity/account/login";
+        public const string LogoutPath = "/identity/account/logout";
+    }
+
+    public static class MaxLengths
+    {
+        public const int StringColumn = 128;
     }
 }

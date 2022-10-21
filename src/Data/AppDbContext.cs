@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using MudBlazorTemplate.Data.Entities;
 using System.Reflection;
 
 namespace MudBlazorTemplate.Data

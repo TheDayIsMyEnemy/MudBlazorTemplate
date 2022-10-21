@@ -1,14 +1,4 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MudBlazor.Services;
-using MudBlazorTemplate;
-using MudBlazorTemplate.Areas.Identity;
-using MudBlazorTemplate.Data;
-using MudBlazorTemplate.Data.Entities;
-
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
@@ -16,13 +6,13 @@ builder.Services.AddDbContextFactory<AppDbContext>(options =>
             providerOptions => providerOptions.EnableRetryOnFailure());
 });
 
-builder.Services.AddDefaultIdentity<User>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
+    options.Stores.MaxLengthForKeys = MaxLengths.StringColumn;
+    options.SignIn.RequireConfirmedAccount = true;
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = null;
-    options.SignIn.RequireConfirmedAccount = true;
 })
-.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>()
 .AddUserConfirmation<UserConfirmation>();
 
@@ -31,12 +21,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     options.SlidingExpiration = true;
+    options.LoginPath = new PathString(Constants.LoginPath);
+    options.LogoutPath = new PathString(Constants.LogoutPath);
 });
 
-builder.Services.Configure<SecurityStampValidatorOptions>(options =>
-    options.ValidationInterval = TimeSpan.FromSeconds(10));
+//builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+//    options.ValidationInterval = TimeSpan.FromSeconds(10));
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options => options.RootDirectory = "/Features");
+
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMudServices();
 
@@ -62,7 +55,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapBlazorHub()
-    .RequireAuthorization();
+.RequireAuthorization();
 
 app.MapFallbackToPage("/_Host");
 

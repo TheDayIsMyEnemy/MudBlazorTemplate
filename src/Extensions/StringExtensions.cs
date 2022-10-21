@@ -3,16 +3,16 @@
     public static class StringExtensions
     {
         public static bool Includes(
-            this string? str,
+            this string? source,
             string? value,
             StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrWhiteSpace(source))
                 return false;
-            else if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
                 return false;
 
-            return str.Contains(value, comparison);
+            return source.Contains(value, comparison);
         }
     }
 }

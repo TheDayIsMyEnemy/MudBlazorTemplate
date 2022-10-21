@@ -1,0 +1,39 @@
+﻿@page "/roles"
+@inherits IndexBase
+@attribute [Authorize(Roles = MudBlazorTemplate.Roles.Admin)]
+
+<PageTitle>Roles</PageTitle>
+
+<MudTable Items="Roles"
+          Hover="true"
+          Loading="IsLoading">
+    <ToolBarContent>
+        <MudFab StartIcon="@Icons.Filled.Add"
+                Color="Color.Primary"
+                Size="Size.Small"
+                Class="fab"
+                OnClick="CreateRole" />
+        <MudSpacer />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Actions</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudStack Row="true">
+                <MudTooltip Placement="Placement.Top" Text="Delete">
+                    <MudIconButton Icon="@Icons.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="(e) => DeleteRole(context)">
+                    </MudIconButton>
+                </MudTooltip>
+            </MudStack>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>

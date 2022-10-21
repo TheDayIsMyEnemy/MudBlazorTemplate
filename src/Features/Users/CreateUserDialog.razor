@@ -1,0 +1,30 @@
+﻿@inherits CreateUserDialogBase
+
+<MudDialog ClassContent="pt-0 px-8" ClassActions="ma-4">
+    <DialogContent>
+        <EditForm Model="FormModel" OnValidSubmit="Submit" id="create-user-form">
+            <DataAnnotationsValidator />
+            <div style="height: 70px;">
+                <MudTextField Label="Email" InputType="InputType.Email" OnlyValidateIfDirty="true" For="@(() => FormModel.Email)" @bind-Value="FormModel.Email" />
+            </div>
+            <div style="height: 70px">
+                <MudTextField Label="Password" InputType="InputType.Password" OnlyValidateIfDirty="true" For="@(() => FormModel.Password)" @bind-Value="FormModel.Password" />
+            </div>
+            <div style="height: 70px">
+                <MudTextField Label="First Name" @bind-Value="FormModel.FirstName" />
+            </div>
+            <div style="height: 70px">
+                <MudTextField Label="Last Name" @bind-Value="FormModel.LastName" />
+            </div>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Transparent" Variant="Variant.Filled" Size="Size.Small" OnClick="MudDialog.Cancel">
+            Cancel
+        </MudButton>
+        <LoadingButton IsLoading="IsLoading" form="create-user-form" />
+@*                <MudButton form="create-user-form" ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">
+        Create
+        </MudButton>*@
+    </DialogActions>
+</MudDialog>

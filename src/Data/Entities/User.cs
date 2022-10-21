@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace MudBlazorTemplate.Data.Entities
+﻿namespace MudBlazorTemplate.Data.Entities
 {
     public class User : IdentityUser
     {

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MudBlazorTemplate.Data.Entities;
-
-namespace MudBlazorTemplate.Data
+﻿namespace MudBlazorTemplate.Data
 {
     public static class DbInitializer
     {
@@ -18,7 +14,7 @@ namespace MudBlazorTemplate.Data
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-                await dbContext.Database.MigrateAsync();
+                 await dbContext.Database.MigrateAsync();
 
                 await CreateRoles(roleManager);
                 await CreateAdminUser(userManager);
