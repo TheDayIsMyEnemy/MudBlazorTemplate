@@ -10,11 +10,12 @@
             using (var scope = serviceProvider.CreateScope())
             {
                 var services = scope.ServiceProvider;
+
                 var dbContext = services.GetRequiredService<AppDbContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-                 await dbContext.Database.MigrateAsync();
+                await dbContext.Database.MigrateAsync();
 
                 await CreateRoles(roleManager);
                 await CreateAdminUser(userManager);

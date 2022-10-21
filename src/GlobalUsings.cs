@@ -8,5 +8,6 @@ global using MudBlazorTemplate;
 global using MudBlazorTemplate.Data;
 global using MudBlazorTemplate.Data.Entities;
 global using MudBlazorTemplate.Extensions;
-global using MudBlazorTemplate.Features.Identity;
 global using MudBlazorTemplate.Features.Components;
+global using MudBlazorTemplate.Features.Identity;
+global using System.ComponentModel.DataAnnotations;

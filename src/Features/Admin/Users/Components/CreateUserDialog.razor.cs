@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using System.ComponentModel.DataAnnotations;
-
-namespace MudBlazorTemplate.Features.Users
+﻿namespace MudBlazorTemplate.Features.Admin.Users.Components
 {
     public class CreateUserDialogBase : ComponentBase
     {
@@ -11,15 +8,20 @@ namespace MudBlazorTemplate.Features.Users
         [CascadingParameter]
         protected MudDialogInstance MudDialog { get; set; } = null!;
 
-        protected async Task Submit(EditContext context)
+        [Parameter]
+        public Func<CreateUserFormModel, Task<bool>> CreateUser { get; set; } = null!;
+
+        protected async Task OnValidSubmit()
         {
             IsLoading = true;
-            //StateHasChanged();
-            await Task.Delay(5000);
+
+            var succeeded = await CreateUser(FormModel);  
+            if (succeeded)
+                MudDialog.Close();
+
             IsLoading = false;
         }
     }
-
 
 
     public class CreateUserFormModel

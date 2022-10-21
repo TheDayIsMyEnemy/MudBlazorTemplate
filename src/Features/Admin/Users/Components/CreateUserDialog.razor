@@ -2,7 +2,7 @@
 
 <MudDialog ClassContent="pt-0 px-8" ClassActions="ma-4">
     <DialogContent>
-        <EditForm Model="FormModel" OnValidSubmit="Submit" id="create-user-form">
+        <EditForm Model="FormModel" OnValidSubmit="OnValidSubmit" id="create-user-form">
             <DataAnnotationsValidator />
             <div style="height: 70px;">
                 <MudTextField Label="Email" InputType="InputType.Email" OnlyValidateIfDirty="true" For="@(() => FormModel.Email)" @bind-Value="FormModel.Email" />
@@ -23,8 +23,5 @@
             Cancel
         </MudButton>
         <LoadingButton IsLoading="IsLoading" form="create-user-form" />
-@*                <MudButton form="create-user-form" ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Small">
-        Create
-        </MudButton>*@
     </DialogActions>
 </MudDialog>

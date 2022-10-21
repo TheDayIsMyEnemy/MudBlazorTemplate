@@ -6,7 +6,7 @@
     ViewData["Title"] = "Log in";
 }
 
-<div class="card text-center shadow mx-md-auto col-md-4">
+<div class="card text-center shadow mx-md-auto col-md-5" style="height: 410px"> 
     <div class="card-header">
         <h5>Log In</h5>
     </div>
@@ -14,12 +14,12 @@
         <section>
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-3" style="height: 90px;">
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                     <label asp-for="Input.Email" class="form-label"></label>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-4">
+                <div class="form-floating mb-4" style="height: 100px;">
                     <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
                     <label asp-for="Input.Password" class="form-label"></label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>

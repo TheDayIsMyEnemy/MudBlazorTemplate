@@ -1,4 +1,6 @@
-﻿namespace MudBlazorTemplate.Features.Roles
+﻿using MudBlazorTemplate.Features.Admin.Roles.Components;
+
+namespace MudBlazorTemplate.Features.Admin.Roles
 {
     public class IndexBase : ComponentBase
     {
@@ -23,7 +25,7 @@
 
         protected async Task CreateRole()
         {
-            var result = await _dialogService.Show<CreateRole>("Create Role").Result;
+            var result = await _dialogService.Show<CreateRoleDialog>("Create Role").Result;
 
             if (!result.Cancelled)
             {
@@ -50,7 +52,7 @@
         {
             var parameters = new DialogParameters();
             parameters.Add("Title", "Delete Role");
-            parameters.Add("Content", $"Are you really sure you want to delete \"{role}\"?");
+            parameters.Add("Content", $"Are you sure you want to delete role \"{role}\"?");
 
             var result = await _dialogService.Show<DeleteConfirmation>("", parameters).Result;
 

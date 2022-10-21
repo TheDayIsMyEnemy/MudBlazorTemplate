@@ -1,14 +1,16 @@
-﻿namespace MudBlazorTemplate.Features.Users
+﻿using MudBlazorTemplate.Features.Admin.Users.Components;
+
+namespace MudBlazorTemplate.Features.Admin.Users
 {
     public class IndexBase : ComponentBase
     {
-        [Inject] 
+        [Inject]
         private ISnackbar _snackbar { get; set; } = null!;
-        [Inject] 
-        private IDialogService _dialogService { get; set; } = null!;
-        [Inject] 
+        [Inject]
+        protected IDialogService _dialogService { get; set; } = null!;
+        [Inject]
         private UserManager<User> _userManager { get; set; } = null!;
-        [CascadingParameter] 
+        [CascadingParameter]
         private Task<AuthenticationState> _authStateTask { get; set; } = null!;
 
         protected bool IsLoading { get; set; }
@@ -42,40 +44,53 @@
             return false;
         }
 
-        protected async Task Create()
+        protected async Task OpenCreateUserDialog()
         {
-            var dialog = _dialogService.Show<CreateUserDialog>("Create user");
-            var result = await dialog.Result;
-            //result.            //result
-            if (!result.Cancelled)
-            {
-                var userData = (CreateUserFormModel)result.Data;
-                var user = new User
-                {
-                    FirstName = userData.FirstName,
-                    LastName = userData.LastName,
-                    Email = userData.Email,
-                    //UserName = userData.UserName
-                };
-
-                var identityResult = await _userManager.CreateAsync(user, userData.Password);
-
-                if (identityResult.Succeeded)
-                {
-                    Users.Add(user);
-                    _snackbar.Add(string.Format(Messages.SuccessfulCreationFormat, user.Email),
-                        Severity.Success);
-                    //dialog.Close();
-                }
-                else
-                {
-                    _snackbar.Add(
-                        string.Join(Environment.NewLine,
-                            identityResult.Errors.Select(e => e.Description)),
-                        Severity.Error);
-                }
-            }
+            var parameters = new DialogParameters();
+            parameters.Add("CreateUser", new Func<CreateUserFormModel, Task<bool>>(CreateUser));
+            await _dialogService.Show<CreateUserDialog>("Create user", parameters).Result;
         }
+
+        private async Task<bool> CreateUser(CreateUserFormModel userData)
+        {
+            var user = new User
+            {
+                FirstName = userData.FirstName,
+                LastName = userData.LastName,
+                Email = userData.Email,
+                UserName = userData.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, userData.Password);
+
+            var message = string.Format(Messages.SuccessfulCreationFormat, user.Email);
+            var severity = Severity.Success;
+
+            if (result.Succeeded)
+            {
+                Users.Add(user);
+            }
+            else
+            {
+                message = string.Join(Environment.NewLine, result.Errors.Select(e => e.Description));
+                severity = Severity.Error;
+            }
+
+            _snackbar.Add(message, severity);
+            return result.Succeeded;
+        }
+
+        //protected async Task ShowAssignRolesDialog(User user)
+        //{
+        //    //var currentRoles = await _userManager.GetRolesAsync(user);
+
+        //    //var parameters = new DialogParameters();
+        //    //parameters.Add("UserRoles", currentRoles);
+        //    //parameters.Add("SelectMultipleRoles", true);
+
+        //    //var result = await _dialogService
+        //    //    .Show<AssignRolesDialog>("Assign Roles", parameters).Result;
+        //}
 
         protected async Task AssignRoles(User user)
         {
